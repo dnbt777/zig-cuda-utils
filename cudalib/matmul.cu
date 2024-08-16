@@ -38,3 +38,36 @@ extern "C" void matmul(float *A, float *B, float *C) {
     cudaFree(d_C);
 }
 
+extern "C" int cuda_device_check() {
+    int deviceCount;
+    cudaGetDeviceCount(&deviceCount);
+
+    if (deviceCount == 0) {
+        printf("No CUDA-capable device found.\n");
+        return -1; // Exit if no device is found
+    }
+
+    // Optionally, you can print device properties
+    cudaDeviceProp deviceProp;
+    cudaGetDeviceProperties(&deviceProp, 0); // Get properties of the first device
+    printf("Using device: %s\n", deviceProp.name);
+
+    // Example matrices
+    float A[N * N] = {1, 2, 3, 4};
+    float B[N * N] = {5, 6, 7, 8};
+    float C[N * N] = {0};
+
+    // Call the matrix multiplication function
+    matmul(A, B, C);
+
+    // Print the result
+    printf("Result matrix C:\n");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%f ", C[i * N + j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+

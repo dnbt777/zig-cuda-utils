@@ -1,8 +1,11 @@
 const std = @import("std");
 
 extern "c" fn matmul(A: *const f32, B: *const f32, C: *const f32) void;
+extern "c" fn cuda_device_check() u8;
 
 pub fn main() !void {
+    _ = cuda_device_check();
+
     // const allocator = std.heap.page_allocator;
 
     const N = 2;
