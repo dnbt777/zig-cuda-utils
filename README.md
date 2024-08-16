@@ -1,7 +1,7 @@
 # zig-cuda-utils
 [WIP!] Library with some GPU accelerated math functions for zig
 
-Currently just a small, easy to understand demo of how to incorporate cuda into zig
+Currently just a small, easy to understand demo of how to compile cuda libraries and link them into zig
 
 
 # instructions
