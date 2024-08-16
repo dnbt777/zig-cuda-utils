@@ -13,7 +13,19 @@ fn createRandomMatrix(N: usize, allocator: *std.mem.Allocator) ![]f32 {
 
     // Fill the matrix with random f32 values
     for (matrix) |*value| {
-        value.* = @mod(@as(f32, @floatFromInt(rng.next())), 100.0); // Random value between 0 and 99
+        value.* = (@mod(@as(f32, @floatFromInt(rng.next())), 100.0) / 100.0) * 2.0 - 1.0; // Random value between -1.0 and 1.0
+    }
+
+    return matrix;
+}
+
+fn createConstMatrix(N: usize, allocator: *std.mem.Allocator, c: f32) ![]f32 {
+    // Create a vector to hold the matrix elements
+    const matrix = try allocator.alloc(f32, N * N);
+
+    // Fill the matrix with random f32 values
+    for (matrix) |*value| {
+        value.* = c;
     }
 
     return matrix;
@@ -36,12 +48,12 @@ pub fn main() !void {
 
     var allocator = std.heap.page_allocator;
 
-    const N = 2; // can change this now
+    const N = 2048; // can change this now
 
     // set up for CUDA
     var A: []f32 = try createRandomMatrix(N, &allocator);
     var B: []f32 = try createRandomMatrix(N, &allocator);
-    var C: []f32 = try createRandomMatrix(N, &allocator); // probably inefficient, could just be junk values
+    var C: []f32 = try createRandomMatrix(N, &allocator);
 
     const start_cuda = time();
     matmul(&A[0], &B[0], &C[0], N);
@@ -51,7 +63,7 @@ pub fn main() !void {
     // reset for zig
     var X: []f32 = try createRandomMatrix(N, &allocator);
     var Y: []f32 = try createRandomMatrix(N, &allocator);
-    var Z: []f32 = try createRandomMatrix(N, &allocator); // could also just be junk values or zeros
+    var Z: []f32 = try createRandomMatrix(N, &allocator);
 
     const start_zig = time();
     //zig matmul here
@@ -60,11 +72,19 @@ pub fn main() !void {
     const zig_time = end_zig - start_zig;
 
     // really annoying for any N over 5
-    //for (0.., C) |index, value| {
-    //    std.debug.print("C[{}] = {}\n", .{ index, value });
-    //}
+    std.debug.print("\n\nZig result\n", .{});
+    for (0..10) |index| {
+        std.debug.print("Z[{}] = {}\n", .{ index, Z[index] });
+    }
+    std.debug.print("...\n", .{});
 
+    std.debug.print("\n\nCuda result\n", .{});
+    for (0..10) |index| {
+        std.debug.print("C[{}] = {}\n", .{ index, C[index] });
+    }
+
+    std.debug.print("...\n", .{});
     std.debug.print("\n\nMatmul {}x{}\n---------------------\n", .{ N, N });
-    std.debug.print("Zig: {}ms\n", .{zig_time});
-    std.debug.print("CUDA: {}ms\n", .{cuda_time});
+    std.debug.print("Pure zig: {}ms\n", .{zig_time});
+    std.debug.print("zig/CUDA: {}ms\n", .{cuda_time});
 }
