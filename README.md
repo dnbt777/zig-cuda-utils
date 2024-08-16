@@ -16,7 +16,7 @@ in `./cudalib` run
 then in `./` run
 `zig build`
 
-then run the executable output to `./zig-out/bin/`
+then run the executable in `./zig-out/bin/`
 
 
 personally I just run `clear;nvcc -shared -o ./cudalib/libmatmul.so -Xcompiler -fPIC ./cudalib/matmul.cu;zig build
