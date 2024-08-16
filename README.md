@@ -15,3 +15,6 @@ then in `./` run
 `zig build`
 
 then run the executable output to `./zig-out/bin/`
+
+
+![image](https://github.com/user-attachments/assets/b3376d03-552f-48f1-83bf-8b0289f2db8d)
