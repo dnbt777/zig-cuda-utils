@@ -6,6 +6,8 @@ Currently just a small, easy to understand demo of how to compile cuda libraries
 
 # instructions
 
+change `N` in `src/main.zig`'s `main()` function to whatever size you want for your matrices
+
 in `./cudalib` run
 
 `nvcc -shared -o libmatmul.so -Xcompiler -fPIC matmul.cu`
@@ -23,3 +25,4 @@ personally I just run `clear;nvcc -shared -o ./cudalib/libmatmul.so -Xcompiler -
 
 ![image](https://github.com/user-attachments/assets/b3376d03-552f-48f1-83bf-8b0289f2db8d)
 
+![image](https://github.com/user-attachments/assets/3db362d7-ebb7-4d20-aec8-839ade9a2d6c)
