@@ -1,9 +1,7 @@
 #include <cuda_runtime.h>
 #include <stdio.h>
 
-#define N 2048 // Size of the matrices (N x N)
-
-__global__ void matmulKernel(float *A, float *B, float *C) {
+__global__ void matmulKernel(float *A, float *B, float *C, int N) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -16,7 +14,7 @@ __global__ void matmulKernel(float *A, float *B, float *C) {
     }
 }
 
-extern "C" void matmul(float *A, float *B, float *C) {
+extern "C" void matmul(float *A, float *B, float *C, int N) {
     float *d_A, *d_B, *d_C;
     size_t size = N * N * sizeof(float);
 
@@ -67,7 +65,7 @@ extern "C" void matmul(float *A, float *B, float *C) {
     dim3 numBlocks((N + threadsPerBlock.x - 1) / threadsPerBlock.x, (N + threadsPerBlock.y - 1) / threadsPerBlock.y);
     
     // Launch the kernel
-    matmulKernel<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C);
+    matmulKernel<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, N);
     
     // Check for kernel launch errors
     err = cudaGetLastError();
