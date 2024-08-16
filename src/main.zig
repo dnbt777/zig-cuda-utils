@@ -36,7 +36,7 @@ pub fn main() !void {
 
     var allocator = std.heap.page_allocator;
 
-    const N = 2048; // can change this now
+    const N = 2; // can change this now
 
     // set up for CUDA
     var A: []f32 = try createRandomMatrix(N, &allocator);

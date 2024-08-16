@@ -1,6 +1,8 @@
 #include <cuda_runtime.h>
 #include <stdio.h>
 
+// made with an LLM
+
 __global__ void matmulKernel(float *A, float *B, float *C, int N) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
